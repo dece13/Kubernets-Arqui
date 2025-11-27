@@ -1,0 +1,9 @@
+---
+# Namespace for the demo application
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo-app
+  labels:
+    name: demo-app
+    environment: production

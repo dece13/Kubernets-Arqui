@@ -1,0 +1,33 @@
+---
+# PodDisruptionBudget for high availability
+# Ensures at least one pod is available during voluntary disruptions
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: backend-pdb
+  namespace: demo-app
+  labels:
+    app: demo-app
+    component: backend
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: demo-app
+      component: backend
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: frontend-pdb
+  namespace: demo-app
+  labels:
+    app: demo-app
+    component: frontend
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: demo-app
+      component: frontend

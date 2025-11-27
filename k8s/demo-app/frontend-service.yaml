@@ -1,0 +1,22 @@
+---
+# Frontend Service - NodePort (external access)
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  namespace: demo-app
+  labels:
+    app: demo-app
+    component: frontend
+spec:
+  type: NodePort
+  selector:
+    app: demo-app
+    component: frontend
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+    nodePort: 30080
+    protocol: TCP
+  sessionAffinity: None

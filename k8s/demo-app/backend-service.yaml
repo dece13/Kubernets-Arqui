@@ -1,0 +1,21 @@
+---
+# Backend Service - ClusterIP (internal access only)
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: demo-app
+  labels:
+    app: demo-app
+    component: backend
+spec:
+  type: ClusterIP
+  selector:
+    app: demo-app
+    component: backend
+  ports:
+  - name: http
+    port: 3000
+    targetPort: 3000
+    protocol: TCP
+  sessionAffinity: None

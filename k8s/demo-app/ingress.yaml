@@ -1,0 +1,37 @@
+---
+# Ingress with Traefik
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: demo-app-ingress
+  namespace: demo-app
+  labels:
+    app: demo-app
+  annotations:
+    # Traefik specific annotations
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+    # Optional: Enable CORS
+    traefik.ingress.kubernetes.io/router.middlewares: demo-app-headers@kubernetescrd
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: demo-app.local  # Replace with your domain
+    http:
+      paths:
+      # Backend API routes
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: backend-service
+            port:
+              number: 3000
+
+      # Frontend routes
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend-service
+            port:
+              number: 8080

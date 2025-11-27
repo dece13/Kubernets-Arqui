@@ -1,0 +1,24 @@
+---
+# ConfigMap for application configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: demo-app-config
+  namespace: demo-app
+  labels:
+    app: demo-app
+data:
+  # Database configuration
+  # Note: PostgreSQL must be deployed separately (not included in these manifests)
+  # Update DB_HOST to match your PostgreSQL service name and namespace
+  # Example: "postgres-service" or "postgres.database.svc.cluster.local"
+  DB_HOST: "postgres-service"
+  DB_PORT: "5432"
+  DB_NAME: "tododb"
+
+  # Backend configuration
+  PORT: "3000"
+  NODE_ENV: "production"
+
+  # Frontend configuration
+  REACT_APP_API_URL: "/api"

@@ -1,0 +1,91 @@
+---
+# Backend Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: demo-app
+  labels:
+    app: demo-app
+    component: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: demo-app
+      component: backend
+  template:
+    metadata:
+      labels:
+        app: demo-app
+        component: backend
+    spec:
+      # Image pull secrets for GHCR
+      imagePullSecrets:
+        - name: ghcr-secret
+
+      containers:
+        - name: backend
+          image: ghcr.io/dece13/demo-app-backend:latest
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 3000
+              name: http
+              protocol: TCP
+
+          # Environment variables from ConfigMap
+          envFrom:
+            - configMapRef:
+                name: demo-app-config
+
+          # Environment variables from Secret
+          env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: demo-app-db-secret
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: demo-app-db-secret
+                  key: DB_PASSWORD
+
+          # Readiness probe - checks if app is ready to serve traffic
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+
+          # Liveness probe - checks if app is alive
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+
+          # Resource limits and requests
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+
+          # Security context
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false

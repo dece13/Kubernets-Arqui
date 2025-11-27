@@ -1,0 +1,37 @@
+---
+# Kustomization file for orchestrating all manifests
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: demo-app
+
+# List of resources to apply
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  - secret-db.yaml
+  - backend-deployment.yaml
+  - backend-service.yaml
+  - frontend-deployment.yaml
+  - frontend-service.yaml
+  - ingress.yaml
+  - hpa-backend.yaml
+  - hpa-frontend.yaml
+  - pdb.yaml
+  - network-policy.yaml
+
+# Common labels applied to all resources
+labels:
+  - pairs:
+      app: demo-app
+      managed-by: kustomize
+
+# Images to be used (can be overridden)
+# Note: 'latest' tag is used as default for simplicity
+# The CI/CD pipeline automatically updates these to specific commit SHAs
+# For manual deployments, override with: kustomize edit set image <image>=<tag>
+images:
+  - name: ghcr.io/dece13/demo-app-backend
+    newTag: latest
+  - name: ghcr.io/dece13/demo-app-frontend
+    newTag: latest
