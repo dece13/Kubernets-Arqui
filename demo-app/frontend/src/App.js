@@ -22,7 +22,7 @@ function App() {
       const data = await response.json();
       setHealth(data);
     } catch (err) {
-      console.error('Health check cambio v1:', err);
+      console.error('Health check cambio v2:', err);
     }
   };
 
