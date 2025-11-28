@@ -80,6 +80,9 @@ Kubernetes pull → namespace desplegado → pods corriendo
 
  Autores
 
+Link del video practica: https://youtu.be/fYpqTf-fVl4
+Link del video exposición: https://youtu.be/wp42-5yU8bA
+
 Daniel Esteban Castellanos
 
 José Andrés Jaramillo
